@@ -16,28 +16,27 @@ pub fn open() -> Vec<String> {
     v
 }
 // Parse the string stack to an array of vectors
-pub fn stacks(s: &String) -> [Vec<char>; 9] {
+pub fn stacks(s: &String) -> Vec<Vec<char>> {
     // Parse with regex, each expresion inside a parethesis () represents a group.
     let re = Regex::new(
         r"([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3}) ([ \[\]A-Z]{3})",
     )
     .unwrap();
     // Create my array (size 9 because of 9 columns on the stack) of vector
-    let mut v: [Vec<char>; 9] = Default::default();
-
+    let mut u: Vec<Vec<char>> = Vec::new();
     // For each line in the stack string, parse it using "re" variable
     // then with that result, call the function add_elements which takes
     // a vector and a Captures type
     for (i, l) in s.lines().rev().enumerate() {
         if i != 0 {
             let parsed = re.captures(l).unwrap();
-            add_elements(parsed, &mut v);
+            add_elements(parsed, &mut u);
         }
     }
-    v
+    u
 }
 
-fn add_elements(cap: Captures, v: &mut [Vec<char>; 9]) {
+fn add_elements(cap: Captures, v: &mut Vec<Vec<char>>) {
     // For each element in the cap variable, if it's not the first element,
     // item will be a string either containing "[<char>]" or "   " (3 blank spaces)
     // if the item is not a blank string, and the char inside it to the v (vector)
@@ -46,7 +45,12 @@ fn add_elements(cap: Captures, v: &mut [Vec<char>; 9]) {
         if j != 0 {
             let s = item.unwrap().as_str().to_string().chars().nth(1).unwrap();
             if s != ' ' {
-                v[j - 1].push(s);
+                match v.get_mut(j - 1) {
+                    Some(u) => u.push(s),
+                    None => {
+                        v.push(vec![s]);
+                    }
+                }
             }
         }
     }

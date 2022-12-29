@@ -22,6 +22,7 @@ fn main() {
     let instruct = common::instructions(inst);
     // First part
     let start_p1 = SystemTime::now();
+    let i = 32;
     part1::part1(&instruct, &mut stack_array_p1);
     let end_p1 = SystemTime::now();
     // Second part

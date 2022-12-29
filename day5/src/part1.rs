@@ -1,4 +1,4 @@
-pub fn part1(inst: &Vec<(i32, i32, i32)>, stacks: &mut [Vec<char>; 9]) {
+pub fn part1(inst: &Vec<(i32, i32, i32)>, stacks: &mut Vec<Vec<char>>) {
     // For each tup (representing an instruction) iterate over the first element
     // which represent the "move n" part of the instruction
     for tup in inst.iter() {
